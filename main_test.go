@@ -69,19 +69,27 @@ func Test_InsertClient_ThenSelectAndCheck(t *testing.T) {
 }
 
 func Test_InsertClient_DeleteClient_ThenCheck(t *testing.T) {
-	db, err := sql.Open("sqlite", "demo.db") // настройте подключение к БД
+	db, err := sql.Open("sqlite", "demo.db")
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 	defer db.Close()
 
-	// cl := Client{
-	// 	FIO:      "Test",
-	// 	Login:    "Test",
-	// 	Birthday: "19700101",
-	// 	Email:    "mail@mail.com",
-	// }
+	cl := Client{
+		FIO:      "Test",
+		Login:    "Test",
+		Birthday: "19700101",
+		Email:    "mail@mail.com",
+	}
 
-	// напиши тест здесь
+	id, err := insertClient(db, cl)
+	require.NoError(t, err)
+	assert.NotEmpty(t, id)
+
+	_, err = selectClient(db, id)
+	require.NoError(t, err)
+
+	err = deleteClient(db, id)
+	require.NoError(t, err)
 }
